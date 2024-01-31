@@ -16,11 +16,13 @@ export default function App() {
   };
 
   const addGoal = () => {
+    if (goalText.length === 0) return;
     setGoals((goals) => [
       ...goals,
       { text: goalText, id: Math.random().toString() },
     ]);
     setIsModalVisible(false);
+    setGoalText("");
   };
 
   const deleteGoal = (selectedGoalIndex: number) => {
@@ -33,38 +35,44 @@ export default function App() {
     setIsModalVisible(true);
   };
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
-      <Header />
-      <Button onPress={openModal} title={"add New Goal"} color={"#5e0acc"} />
-      {
-        <GoalInput
-          goalText={goalText}
-          isVisible={isModalVisible}
-          goalInputHandler={(enteredText: string) =>
-            goalInputHandler(enteredText)
-          }
-          resetGoalText={() => setGoalText("")}
-          addGoal={addGoal}
-        />
-      }
-      <View style={styles.listContainer}>
-        <FlatList
-          data={goals}
-          renderItem={({ item, index }) => {
-            return (
-              <GoalItem item={item} deleteGoal={() => deleteGoal(index)} />
-            );
-          }}
-          keyExtractor={(item, index) => {
-            return `${item.id}-${index}`;
-          }}
-          alwaysBounceVertical={false}
-        />
+    <>
+      <StatusBar barStyle="light-content" />
+      <View style={styles.container}>
+        <Header />
+        <Button onPress={openModal} title={"add New Goal"} color={"#b780ff"} />
+        {
+          <GoalInput
+            goalText={goalText}
+            isVisible={isModalVisible}
+            closeModal={closeModal}
+            goalInputHandler={(enteredText: string) =>
+              goalInputHandler(enteredText)
+            }
+            addGoal={addGoal}
+          />
+        }
+        <View style={styles.listContainer}>
+          <FlatList
+            data={goals}
+            renderItem={({ item, index }) => {
+              return (
+                <GoalItem item={item} deleteGoal={() => deleteGoal(index)} />
+              );
+            }}
+            keyExtractor={(item, index) => {
+              return `${item.id}-${index}`;
+            }}
+            alwaysBounceVertical={false}
+          />
+        </View>
+        <Footer />
       </View>
-      <Footer />
-    </View>
+    </>
   );
 }
 
@@ -76,7 +84,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingVertical: 50,
     paddingHorizontal: 20,
-    backgroundColor: "white",
     gap: 24,
   },
 

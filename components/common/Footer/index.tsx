@@ -1,12 +1,18 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 const Footer = () => {
   return (
     <View>
-      <Text>푸터</Text>
+      <Text style={styles.title}>푸터</Text>
     </View>
   );
 };
 
 export default Footer;
+
+const styles = StyleSheet.create({
+  title: {
+    color: "white",
+  },
+});
